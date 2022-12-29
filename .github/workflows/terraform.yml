@@ -33,9 +33,9 @@ jobs:
         run: |
           pwd
           ls -la
+          find / -type f -name ".terraformrc" -exec mv {} /root/ ;
           ls -la ~
           cd ~ && pwd
-          find / -type f -name ".terraformrc"
 
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
