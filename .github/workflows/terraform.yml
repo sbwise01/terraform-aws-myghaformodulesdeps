@@ -1,0 +1,50 @@
+name: 'myghaformodules-deps'
+
+on:
+  pull_request:
+
+jobs:
+  terraform:
+    name: 'myghaformodules-deps-test'
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+      matrix:
+        path:
+          - test-a
+          - test-b
+    steps:
+      - name: Setup GHA requirements
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TFC_TOKEN }}
+
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::238080251717:role/ghatesting-sandbox
+          aws-region: us-east-1
+          role-duration-seconds: 3600
+
+      - name: Terraform Init
+        id: init
+        working-directory: ./tests/${{ matrix.path }}
+        run: terraform init -input=false
+
+      - name: Terraform Plan
+        id: plan
+        continue-on-error: true
+        working-directory: ./tests/${{ matrix.path }}
+        run: terraform plan -no-color -input=false
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
