@@ -30,7 +30,9 @@ jobs:
       - name: Debug Terraform setup
         id: debug
         working-directory: ./tests/${{ matrix.path }}
+        run: pwd
         run: ls -la
+        run: ls -la ~
 
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
