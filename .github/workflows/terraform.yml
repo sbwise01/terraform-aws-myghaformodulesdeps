@@ -13,6 +13,8 @@ jobs:
         path:
           - test-a
           - test-b
+    env:
+      TF_TOKEN_app_terraform_io: ${{ secrets.TFC_TOKEN }}
     steps:
       - name: Setup GHA requirements
         uses: actions/setup-node@v2
@@ -23,10 +25,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        id: setupterraform
         working-directory: ./tests/${{ matrix.path }}
-        with:
-          cli_config_credentials_token: ${{ secrets.TFC_TOKEN }}
+        run: ../../.github/scripts/setup_terraform.sh
 
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
