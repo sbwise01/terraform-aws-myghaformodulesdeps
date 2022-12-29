@@ -47,6 +47,11 @@ jobs:
         working-directory: ./tests/${{ matrix.path }}
         run: terraform plan -no-color -input=false
 
+      - name: Teardown Terraform
+        id: teardownterraform
+        working-directory: ./tests/${{ matrix.path }}
+        run: rm -f ~/.terraformrc
+
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
