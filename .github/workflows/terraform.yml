@@ -31,6 +31,11 @@ jobs:
           aws-region: us-east-1
           role-duration-seconds: 3600
 
+      - name: Debug setup
+        id: debug
+        working-directory: ./tests/${{ matrix.path }}
+        run: env
+
       - name: Terraform Init
         id: init
         working-directory: ./tests/${{ matrix.path }}
