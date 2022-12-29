@@ -27,6 +27,11 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TFC_TOKEN }}
 
+      - name: Debug Terraform setup
+        id: debug
+        working-directory: ./tests/${{ matrix.path }}
+        run: ls -la
+
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
