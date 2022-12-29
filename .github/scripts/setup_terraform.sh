@@ -11,3 +11,6 @@ EOL
 cat > ${GITHUB_ENV} <<EOL2
 export TF_CLI_CONFIG_FILE="${GITHUB_WORKSPACE}/.terraformrc"
 EOL2
+
+echo "contents of ENV:"
+cat ${GITHUB_ENV}
